@@ -9,14 +9,14 @@ export default function Home() {
   const [form, setForm] = useState({ produto: "", quantidade_planejada: 0, operador: "", meta_hora: 100 });
 
   const buscarDados = () => {
-    fetch("https://sistema-industrial.onrender.com0/api/ordens").then(res => res.json()).then(data => setOrdens(data || []));
+    fetch("https://sistema-industrial.onrender.com/api/ordens").then(res => res.json()).then(data => setOrdens(data || []));
   };
 
   useEffect(() => { buscarDados(); }, []);
 
   const criarOrdem = async (e: any) => {
     e.preventDefault();
-    await fetch("https://sistema-industrial.onrender.com0/api/ordens", {
+    await fetch("https://sistema-industrial.onrender.com/api/ordens", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -28,14 +28,14 @@ export default function Home() {
   const registrarProducao = async (id: number) => {
     const qtd = parseInt(prompt("Quantidade produzida no lote:") || "0");
     if (qtd > 0) {
-      await fetch(`https://sistema-industrial.onrender.com0/api/ordens/${id}/produzir?incremento=${qtd}&status=Produzindo`, { method: "PATCH" });
+      await fetch(`https://sistema-industrial.onrender.com/api/ordens/${id}/produzir?incremento=${qtd}&status=Produzindo`, { method: "PATCH" });
       buscarDados();
     }
   };
 
   const excluir = async (id: number) => {
     if (confirm("Deseja encerrar e remover esta OP?")) {
-      await fetch(`https://sistema-industrial.onrender.com0/api/ordens/${id}`, { method: "DELETE" });
+      await fetch(`https://sistema-industrial.onrender.com/api/ordens/${id}`, { method: "DELETE" });
       buscarDados();
     }
   };
