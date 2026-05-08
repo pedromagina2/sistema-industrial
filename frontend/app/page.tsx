@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, defs, linearGradient, stop } from "recharts";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { Moon, Sun, Trash2, Plus, Play } from "lucide-react"; // npm install lucide-react
 
 export default function Home() {
@@ -48,14 +48,14 @@ export default function Home() {
   return (
     <div className={`${darkMode ? "bg-[#0F172A] text-slate-100" : "bg-slate-50 text-slate-900"} min-h-screen transition-colors duration-500 font-sans`}>
       <div className="max-w-7xl mx-auto p-6">
-        
+
         {/* HEADER COM TOGGLE DARK MODE */}
         <header className="flex justify-between items-center mb-10">
           <div>
             <h1 className="text-2xl font-black tracking-tight uppercase">MES <span className="text-indigo-500">Pro</span></h1>
             <p className={`${darkMode ? "text-slate-500" : "text-slate-400"} text-[10px] font-bold tracking-[0.2em]`}>CRUZEIRO INDUSTRIAL HUB</p>
           </div>
-          <button 
+          <button
             onClick={() => setDarkMode(!darkMode)}
             className={`p-3 rounded-2xl ${darkMode ? "bg-slate-800 text-yellow-400" : "bg-white text-indigo-600 shadow-md"} transition-all`}
           >
@@ -71,7 +71,7 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
+
           {/* LANÇAMENTO TÉCNICO */}
           <section className={`lg:col-span-4 p-8 rounded-[2rem] ${darkMode ? "bg-slate-800/50 border-slate-700" : "bg-white border-slate-100 shadow-sm"} border`}>
             <div className="flex items-center gap-2 mb-6">
@@ -80,15 +80,15 @@ export default function Home() {
             </div>
             <form onSubmit={criarOrdem} className="space-y-4">
               <Input label="Produto / SKU" placeholder="Ex: Chassis-V15" value={form.produto} dark={darkMode}
-                onChange={e => setForm({...form, produto: e.target.value})} />
+                onChange={e => setForm({ ...form, produto: e.target.value })} />
               <div className="grid grid-cols-2 gap-4">
                 <Input label="Meta Total" type="number" value={form.quantidade_planejada || ""} dark={darkMode}
-                  onChange={e => setForm({...form, quantidade_planejada: parseInt(e.target.value) || 0})} />
+                  onChange={e => setForm({ ...form, quantidade_planejada: parseInt(e.target.value) || 0 })} />
                 <Input label="Meta p/ Hora" type="number" value={form.meta_hora} dark={darkMode}
-                  onChange={e => setForm({...form, meta_hora: parseInt(e.target.value) || 0})} />
+                  onChange={e => setForm({ ...form, meta_hora: parseInt(e.target.value) || 0 })} />
               </div>
               <Input label="Operador" placeholder="Nome do Responsável" value={form.operador} dark={darkMode}
-                onChange={e => setForm({...form, operador: e.target.value})} />
+                onChange={e => setForm({ ...form, operador: e.target.value })} />
               <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-indigo-500/20 uppercase text-xs tracking-widest">
                 Abrir Ordem de Produção
               </button>
@@ -101,16 +101,16 @@ export default function Home() {
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={ordens}>
-                  <defs>
+                  <defs> {/* O React entende isso como SVG nativo, sem precisar de import */}
                     <linearGradient id="colorInd" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={darkMode ? "#334155" : "#E2E8F0"} />
                   <XAxis dataKey="produto" fontSize={10} axisLine={false} tickLine={false} stroke={darkMode ? "#64748b" : "#94a3b8"} />
                   <YAxis fontSize={10} axisLine={false} tickLine={false} stroke={darkMode ? "#64748b" : "#94a3b8"} />
-                  <Tooltip contentStyle={{backgroundColor: darkMode ? '#1E293B' : '#FFF', border: 'none', borderRadius: '12px'}} />
+                  <Tooltip contentStyle={{ backgroundColor: darkMode ? '#1E293B' : '#FFF', border: 'none', borderRadius: '12px' }} />
                   <Area type="monotone" dataKey="quantidade_produzida" stroke="#6366f1" strokeWidth={4} fill="url(#colorInd)" />
                 </AreaChart>
               </ResponsiveContainer>
@@ -130,16 +130,16 @@ export default function Home() {
                   </div>
                   <h4 className="text-xl font-bold mb-1 uppercase tracking-tight">{o.produto}</h4>
                   <p className="text-[10px] font-bold text-indigo-500 mb-6 uppercase tracking-widest">Op: {o.operador}</p>
-                  
+
                   <div className="flex justify-between text-[10px] font-black mb-2 uppercase opacity-60">
                     <span>Progresso Real</span>
                     <span>{perc}%</span>
                   </div>
                   <div className={`w-full h-3 rounded-full mb-6 overflow-hidden ${darkMode ? "bg-slate-700" : "bg-slate-100"}`}>
-                    <div className={`h-full transition-all duration-1000 ${isLow ? "bg-orange-500" : "bg-indigo-500"}`} style={{width: `${perc}%`}}></div>
+                    <div className={`h-full transition-all duration-1000 ${isLow ? "bg-orange-500" : "bg-indigo-500"}`} style={{ width: `${perc}%` }}></div>
                   </div>
 
-                  <button 
+                  <button
                     onClick={() => registrarProducao(o.id)}
                     className={`w-full py-4 rounded-2xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all ${darkMode ? "bg-slate-700 hover:bg-indigo-600" : "bg-slate-50 hover:bg-indigo-600 hover:text-white"}`}
                   >
@@ -172,10 +172,10 @@ function Input({ label, dark, ...props }: any) {
       <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1 block ml-2">
         {label}
       </label>
-      <input 
-        {...props} 
+      <input
+        {...props}
         className={`w-full p-4 rounded-2xl border-none outline-none focus:ring-2 ring-indigo-500 transition-all text-sm 
-          ${dark ? "bg-slate-900 text-white" : "bg-slate-50 text-slate-900"}`} 
+          ${dark ? "bg-slate-900 text-white" : "bg-slate-50 text-slate-900"}`}
       />
     </div>
   );
